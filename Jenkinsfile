@@ -1,10 +1,10 @@
 node ('master') {
 
-  stage ('checkout') {
+  stage ('SCM-checkout') {
     checkout([$class: 'GitSCM', 
-        branches: [[name: '*/master']], 
-        extensions: [], 
-        userRemoteConfigs: [[url: 'https://github.com/ganeshhp/helloworldweb.git']]])
+       branches: [[name: '*/master']], 
+       extensions: [], 
+       userRemoteConfigs: [[url: 'https://github.com/plusforum/helloworldweb.git']]])
   }
   
   stage ('build') {
@@ -12,15 +12,7 @@ node ('master') {
   }
   
   stage ('archive') {
-    archiveArtifacts artifacts: 'target/Helloworldwebapp-dev.war', 
-        followSymlinks: false
-        
+    archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
   }
   
-  input 'Proceed with Deployment?'
-  
-  stage ('deploy-to-artifactory') {
-    sh 'curl -uuser1:AP78JGyu7hG9NZr1o4rNbnCQ2MY -T target/Helloworldwebapp-dev.war "https://automationfactory.jfrog.io/artifactory/helloworld/Helloworldwebapp-dev.war"'
-  }
-      
-  }
+}
